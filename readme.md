@@ -7,10 +7,14 @@ development virtual machine.
 #### CentOs VM access problem:
 [Vagrant SSH Solution](./hgop-docs/vagrant-ssh-problem.md)
 
+#### Project fixes
+[NPM install errors](./hgop-docs/npm-install-errors.md)
+
 ### Thursday 26.11
 
 #### Project increments, day by day
 [Day 1](./hgop-docs/day1.md)
+[Day 2](./hgop-docs/day2.md)
 
 ### Project backlog
 
