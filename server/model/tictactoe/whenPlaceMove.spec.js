@@ -5,7 +5,7 @@ const tictactoeCommandHandler = require('./tictactoeCommandHandler');
 describe('place move command', () => {
   let given, when, then;
 
-  it('should place move in empty cell', () => {
+  beforeEach(() => {
     given = [{
       gameId:'1',
       commandId:'aB12',
@@ -22,7 +22,9 @@ describe('place move command', () => {
       side:'O',
       timeStamp:'2015-12-04T00:00:30Z'
     }];
+  });
 
+  it('should place move in empty cell', () => {
     when = {
       gameId:'1',
       commandId:'6667',
@@ -49,23 +51,7 @@ describe('place move command', () => {
   });
 
   it('should not allow placing in occupied cell', () => {        
-    given = [{
-      gameId:'1',
-      commandId:'aB12',
-      event:'gameCreated',
-      player:'Jon',
-      side:'X',
-      timeStamp:'2015-12-04T00:00:03Z'
-    },
-    {
-      gameId:'1',
-      commandId:'1337',
-      event:'gameJoined',
-      player:'Bjorn',
-      side:'O',
-      timeStamp:'2015-12-04T00:00:30Z'
-    },
-    {
+    given.push({
       gameId:'1',
       commandId:'blah',
       event:'movePlaced',
@@ -73,7 +59,7 @@ describe('place move command', () => {
       x:0,
       y:1,
       timeStamp:'2015-12-04T00:00:45Z'
-    }];
+    });
     
     when = {
       gameId:'1',
