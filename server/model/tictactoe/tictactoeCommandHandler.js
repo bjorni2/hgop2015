@@ -13,10 +13,18 @@ function tictactoeCommandHandler(events){
         }];  
       }
       else if(cmd.command === 'joinGame'){
-        return [{
+        if(events[0] !== undefined){
+          return [{
           gameId:cmd.gameId,
           commandId:cmd.commandId,
           event:"gameJoined",
+          player:cmd.player,
+          timeStamp:cmd.timeStamp
+          }];
+        }
+        return [{
+          commandId:cmd.commandId,
+          event:"gameDidNotExist",
           player:cmd.player,
           timeStamp:cmd.timeStamp
         }];

@@ -33,4 +33,24 @@ describe('join game command', () => {
     JSON.stringify(actual).should.be.exactly(JSON.stringify(then));
   });
 
+  it('should not allow joining non-existing games', () => {
+    given = [];
+    when = {
+      gameId:"33",
+      commandId:"abcd",
+      command:"joinGame",
+      player:"Gunnar",
+      timeStamp:"2015-11-04T00:00:30Z"
+    };
+    then=[{
+      commandId:"abcd",
+      event:"gameDidNotExist",
+      player:"Gunnar",
+      timeStamp:"2015-11-04T00:00:30Z"
+    }];
+
+    let actual = tictactoeCommandHandler(given).executeCommand(when);
+
+    JSON.stringify(actual).should.be.exactly(JSON.stringify(then));
+  });
 });
