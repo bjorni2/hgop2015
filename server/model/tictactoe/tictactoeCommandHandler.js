@@ -53,7 +53,7 @@ function tictactoeCommandHandler(events){
         }];
       }
       else if(cmd.command === 'placeMove'){
-        if(cmd.x < 0 || cmd.x > 2 || cmd.y < 0 || cmd.y > 2 || gameState.board[cmd.x][cmd.y] !== ''){
+        if(!legalMove(gameState.board, cmd.x, cmd.y)){
           return [{
             gameId:cmd.gameId,
             commandId:cmd.commandId,
@@ -83,6 +83,16 @@ function pickRandomSide(){
   }
   return 'O';
 }
+
+function legalMove(board, x, y){
+  if(x < 0 || x > 2 || y < 0 || y > 2){
+    return false; 
+  }
+  if(board[x][y] !== ''){
+    return false;
+  }
+  return true;
+};
 
 module.exports = tictactoeCommandHandler;
 
