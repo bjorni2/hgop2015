@@ -29,6 +29,17 @@ function tictactoeCommandHandler(events){
           timeStamp:cmd.timeStamp
         }];
       }
+      else if(cmd.command === 'placeMove'){
+        return[{
+          gameId:cmd.gameId,
+          commandId:cmd.commandId,
+          event:"movePlaced",
+          player:cmd.player,
+          x:cmd.x,
+          y:cmd.y,
+          timeStamp:cmd.timeStamp
+        }];
+      }
     }
   };
 };
