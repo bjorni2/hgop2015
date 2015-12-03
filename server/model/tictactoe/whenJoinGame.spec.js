@@ -1,18 +1,6 @@
 'use strict';
 
-function tictactoeCommandHandler(events){
-  return {
-    executeCommand: (cmd) => {
-      return [{
-        gameId:cmd.gameId,
-        commandId:cmd.commandId,
-        event:"gameJoined",
-        player:cmd.player,
-        timeStamp:cmd.timeStamp
-      }];
-    }
-  };
-};
+const tictactoeCommandHandler = require('./tictactoeCommandHandler');
 
 describe('join game command', () => {
   let given, when, then;
