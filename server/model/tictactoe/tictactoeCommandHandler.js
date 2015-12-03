@@ -7,8 +7,9 @@ function tictactoeCommandHandler(events){
         return [{
           gameId:cmd.gameId,
           commandId:cmd.commandId,
-          event:"gameCreated",
+          event:'gameCreated',
           player:cmd.player,
+          side:pickRandomSide(),
           timeStamp:cmd.timeStamp
         }];  
       }
@@ -17,14 +18,15 @@ function tictactoeCommandHandler(events){
           return [{
           gameId:cmd.gameId,
           commandId:cmd.commandId,
-          event:"gameJoined",
+          event:'gameJoined',
           player:cmd.player,
+          side:(events[0].side == 'X' ? 'O' : 'X'),
           timeStamp:cmd.timeStamp
           }];
         }
         return [{
           commandId:cmd.commandId,
-          event:"gameDidNotExist",
+          event:'gameDidNotExist',
           player:cmd.player,
           timeStamp:cmd.timeStamp
         }];
@@ -33,7 +35,7 @@ function tictactoeCommandHandler(events){
         return[{
           gameId:cmd.gameId,
           commandId:cmd.commandId,
-          event:"movePlaced",
+          event:'movePlaced',
           player:cmd.player,
           x:cmd.x,
           y:cmd.y,
@@ -43,6 +45,13 @@ function tictactoeCommandHandler(events){
     }
   };
 };
+
+function pickRandomSide(){
+  if(Math.random() < 0.5){
+    return 'X';
+  }
+  return 'O';
+}
 
 module.exports = tictactoeCommandHandler;
 
