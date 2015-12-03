@@ -53,8 +53,8 @@ function tictactoeCommandHandler(events){
         }];
       }
       else if(cmd.command === 'placeMove'){
-        if(gameState.board[cmd.x][cmd.y] !== ''){
-          return[{
+        if(cmd.x < 0 || cmd.x > 2 || cmd.y < 0 || cmd.y > 2 || gameState.board[cmd.x][cmd.y] !== ''){
+          return [{
             gameId:cmd.gameId,
             commandId:cmd.commandId,
             event:'illegalMove',
@@ -63,7 +63,7 @@ function tictactoeCommandHandler(events){
           }];
         }        
 
-        return[{
+        return [{
           gameId:cmd.gameId,
           commandId:cmd.commandId,
           event:'movePlaced',
