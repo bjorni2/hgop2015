@@ -107,4 +107,74 @@ describe('place move command', () => {
 
    JSON.stringify(actual).should.be.exactly(JSON.stringify(then));
  });
+
+  it('should make vertical win possible', () => {
+    given.push({
+      gameId:'1',
+      commandId:'blah',
+      event:'movePlaced',
+      player:'Jon',
+      x:1,
+      y:1,
+      timeStamp:'2015-12-04T00:00:45Z'
+    },
+    {
+      gameId:'1',
+      commandId:'4242',
+      event:'movePlaced',
+      player:'Bjorn',
+      x:0,
+      y:0,
+      timeStamp:'2015-12-04T00:00:48Z'
+    },
+    {
+      gameId:'1',
+      commandId:'1111',
+      event:'movePlaced',
+      player:'Jon',
+      x:0,
+      y:1,
+      timeStamp:'2015-12-04T00:00:52Z'
+    },
+    {
+      gameId:'1',
+      commandId:'7777',
+      event:'movePlaced',
+      player:'Bjorn',
+      x:2,
+      y:2,
+      timeStamp:'2015-12-04T00:00:57Z'
+    });
+
+    when = {
+      gameId:'1',
+      commandId:'5544',
+      command:'placeMove',
+      player:'Jon',
+      x:2,
+      y:1,
+      timeStamp:'2015-12-04T00:01:00Z'
+    }
+
+    then=[{
+      gameId:'1',
+      commandId:'5544',
+      event:'movePlaced',
+      player:'Jon',
+      x:2,
+      y:1,
+      timeStamp:'2015-12-04T00:01:00Z'
+    },
+    {
+      gameId:'1',
+      commandId:'5544',
+      event:'gameOver',
+      winner:'Jon',
+      timeStamp:'2015-12-04T00:01:00Z'
+    }];
+
+    let actual = tictactoeCommandHandler(given).executeCommand(when);
+
+    JSON.stringify(actual).should.be.exactly(JSON.stringify(then));
+  });
 });

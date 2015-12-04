@@ -4,6 +4,7 @@ function tictactoeCommandHandler(events){
   const gameState = {
     gameId:events[0] && events[0].gameId,
     state:'active',
+    winner:'',
     playerOne:{
       name:events[0] && events[0].player,
       side:events[0] && events[0].side
@@ -21,7 +22,7 @@ function tictactoeCommandHandler(events){
       gameState.board[e.x][e.y] = side;
     }
   });
-
+  
   return {
     executeCommand: (cmd) => {
       if(cmd.command === 'createGame'){
@@ -53,6 +54,7 @@ function tictactoeCommandHandler(events){
         }];
       }
       else if(cmd.command === 'placeMove'){
+        console.log(gameState.board);
         if(!legalMove(gameState.board, cmd.x, cmd.y)){
           return [{
             gameId:cmd.gameId,
@@ -62,6 +64,30 @@ function tictactoeCommandHandler(events){
             timeStamp:cmd.timeStamp
           }];
         }        
+        
+        const side = (cmd.player === gameState.playerOne.name ? gameState.playerOne.side : gameState.playerTwo.side);
+        if(gameState.board[0][cmd.y] === side || cmd.x === 0){
+          if(gameState.board[1][cmd.y] === side || cmd.x === 1){
+            if(gameState.board[2][cmd.y] === side || cmd.x === 2){
+              return [{
+                gameId:cmd.gameId,
+                commandId:cmd.commandId,
+                event:'movePlaced',
+                player:cmd.player,
+                x:cmd.x,
+                y:cmd.y,
+                timeStamp:cmd.timeStamp
+              },
+              {
+                gameId:cmd.gameId,
+                commandId:cmd.commandId,
+                event:'gameOver',
+                winner:cmd.player,
+                timeStamp:cmd.timeStamp
+              }];
+            }
+          }
+        }
 
         return [{
           gameId:cmd.gameId,
