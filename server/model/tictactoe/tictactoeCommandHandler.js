@@ -3,7 +3,7 @@
 function tictactoeCommandHandler(events){
   const gameState = {
     gameId:events[0] && events[0].gameId,
-    state:'active',
+    status:'idle',
     winner:'',
     playerOne:{
       name:events[0] && events[0].player,
@@ -23,8 +23,11 @@ function tictactoeCommandHandler(events){
       gameState.board[e.x][e.y] = side;
       gameState.cellsLeft -= 1;
     }
-    if(e.event === 'gameOver'){
-      gameState.state = 'gameOver';
+    else if(e.event === 'gameOver'){
+      gameState.status = 'gameOver';
+    }
+    else if(e.event === 'gameJoined'){
+      gameState.status = 'active';
     }
   });
   
@@ -42,6 +45,15 @@ function tictactoeCommandHandler(events){
       }
       else if(cmd.command === 'joinGame'){
         if(events[0] !== undefined){
+          if(gameState.status === 'active'){
+            return [{
+            gameId:cmd.gameId,
+            commandId:cmd.commandId,
+            event:'gameWasFull',
+            player:cmd.player,
+            timeStamp:cmd.timeStamp
+            }];
+          }
           return [{
           gameId:cmd.gameId,
           commandId:cmd.commandId,
@@ -59,7 +71,7 @@ function tictactoeCommandHandler(events){
         }];
       }
       else if(cmd.command === 'placeMove'){        
-        if(gameState.state === 'gameOver' || !legalMove(gameState.board, cmd.x, cmd.y)){
+        if(gameState.status === 'gameOver' || !legalMove(gameState.board, cmd.x, cmd.y)){
           return [{
             gameId:cmd.gameId,
             commandId:cmd.commandId,

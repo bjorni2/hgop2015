@@ -55,4 +55,41 @@ describe('join game command', () => {
 
     JSON.stringify(actual).should.be.exactly(JSON.stringify(then));
   });
+  
+  it('should not allow more than two players in a game', () => {
+    given = [{
+      gameId:'3',
+      commandId:'aB12',
+      event:'gameCreated',
+      player:'Jon',
+      side:'O',
+      timeStamp:'2015-12-04T00:00:03Z'
+    },
+    {
+      gameId:'3',
+      commandId:'1337',
+      event:'gameJoined',
+      player:'Bjorn',
+      side:'X',
+      timeStamp:'2015-12-04T00:00:30Z'
+    }];
+    when = {
+      gameId:'3',
+      commandId:'5454',
+      command:'joinGame',
+      player:'Gunnar',
+      timeStamp:'2015-11-04T00:00:32Z'
+    };
+    then=[{
+      gameId:'3',
+      commandId:'5454',
+      event:'gameWasFull',
+      player:'Gunnar',
+      timeStamp:'2015-11-04T00:00:32Z'
+    }];
+
+    let actual = tictactoeCommandHandler(given).executeCommand(when);
+
+    JSON.stringify(actual).should.be.exactly(JSON.stringify(then));
+  });
 });
