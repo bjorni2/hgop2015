@@ -518,4 +518,28 @@ describe('place move command', () => {
 
     JSON.stringify(actual).should.be.exactly(JSON.stringify(then));
   });
+  
+  it('should not allow O to start the game', () => {
+    when = {
+      gameId:'1',
+      commandId:'9231',
+      command:'placeMove',
+      player:'Bjorn',
+      x:1,
+      y:1,
+      timeStamp:'2015-12-04T00:01:30Z'
+    };
+
+    then=[{
+      gameId:'1',
+      commandId:'9231',
+      event:'illegalMove',
+      player:'Bjorn',
+      timeStamp:'2015-12-04T00:01:30Z'
+    }];
+
+    let actual = tictactoeCommandHandler(given).executeCommand(when);
+
+    JSON.stringify(actual).should.be.exactly(JSON.stringify(then));
+  });
 });

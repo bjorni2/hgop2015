@@ -70,8 +70,10 @@ function tictactoeCommandHandler(events){
           timeStamp:cmd.timeStamp
         }];
       }
-      else if(cmd.command === 'placeMove'){        
-        if(gameState.status === 'gameOver' || !legalMove(gameState.board, cmd.x, cmd.y)){
+      else if(cmd.command === 'placeMove'){   
+        const side = (cmd.player === gameState.playerOne.name ? gameState.playerOne.side : gameState.playerTwo.side);
+      
+        if(gameState.status === 'gameOver' || !legalMove(gameState, cmd.x, cmd.y, side)){
           return [{
             gameId:cmd.gameId,
             commandId:cmd.commandId,
@@ -85,8 +87,7 @@ function tictactoeCommandHandler(events){
         // console.log(gameState.board[1]);
         // console.log(gameState.board[2]);
         
-        const side = (cmd.player === gameState.playerOne.name ? gameState.playerOne.side : gameState.playerTwo.side);
-        if(gameOver(gameState.board, cmd.x, cmd.y, side)){
+        if(gameOver(gameState, cmd.x, cmd.y, side)){
           return [{
             gameId:cmd.gameId,
             commandId:cmd.commandId,
@@ -145,20 +146,32 @@ function pickRandomSide(){
   return 'O';
 }
 
-function legalMove(board, x, y){
+function legalMove(gameState, x, y, side){
+  const board = gameState.board;
+  
+  // Out of bounds.
   if(x < 0 || x > 2 || y < 0 || y > 2){
     return false; 
   }
+  // Occupied cell.
   if(board[x][y] !== ''){
     return false;
   }
+  // Out of turn.
+  if((gameState.cellsLeft % 2 === 1 && side === 'O') ||
+     (gameState.cellsLeft % 2 === 0 && side === 'X')){
+       return false;
+     }
+  
   return true;
 }
 
-function gameOver(board, x, y, side){
-  if(!legalMove(board, x, y)){
+function gameOver(gameState, x, y, side){
+  if(!legalMove(gameState, x, y)){
     return false;
   }
+  
+  const board = gameState.board;
   
   board[x][y] = side;
 
