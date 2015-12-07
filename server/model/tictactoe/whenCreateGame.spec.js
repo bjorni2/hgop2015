@@ -26,7 +26,7 @@ describe('create game command', () => {
     
     let actual = tictactoeCommandHandler(given).executeCommand(when); 
     
-    assert(actual[0].side == 'X' || actual[0].side == 'O');
+    assert(actual[0].side === 'X' || actual[0].side === 'O');
     actual[0].side = 'X';
     JSON.stringify(actual).should.be.exactly(JSON.stringify(then));
   });
@@ -51,7 +51,7 @@ describe('create game command', () => {
 
     let actual = tictactoeCommandHandler(given).executeCommand(when);
     
-    assert(actual[0].side == 'X' || actual[0].side == 'O');
+    assert(actual[0].side === 'X' || actual[0].side === 'O');
     actual[0].side = 'X';
     JSON.stringify(actual).should.be.exactly(JSON.stringify(then));
   });
