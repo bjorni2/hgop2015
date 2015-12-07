@@ -21,6 +21,9 @@ function tictactoeCommandHandler(events){
       const side = (e.player === gameState.playerOne.name ? gameState.playerOne.side : gameState.playerTwo.side);
       gameState.board[e.x][e.y] = side;
     }
+    if(e.event === 'gameOver'){
+      gameState.state = 'gameOver';
+    }
   });
   
   return {
@@ -54,9 +57,16 @@ function tictactoeCommandHandler(events){
         }];
       }
       else if(cmd.command === 'placeMove'){
-        console.log(gameState.board[0]);
-        console.log(gameState.board[1]);
-        console.log(gameState.board[2]);
+        if(gameState.state === 'gameOver'){
+          return [{
+            gameId:cmd.gameId,
+            commandId:cmd.commandId,
+            event:'illegalMove',
+            player:cmd.player,
+            timeStamp:cmd.timeStamp
+          }];
+        }
+        
         if(!legalMove(gameState.board, cmd.x, cmd.y)){
           return [{
             gameId:cmd.gameId,
@@ -133,6 +143,14 @@ function gameOver(board, x, y, side){
   if(board[0][y] === board[1][y] && board[0][y] === board[2][y]){
     return true;
   }
+  // diagonal wins.
+  if(board[0][0] === board[1][1] && board[0][0] === board[2][2]){
+    return true;
+  }
+  if(board[2][0] === board[1][1] && board[2][0] === board[0][2]){
+    return true;
+  }
+  
   
   return false;
 }

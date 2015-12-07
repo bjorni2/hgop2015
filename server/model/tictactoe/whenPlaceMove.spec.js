@@ -247,4 +247,169 @@ describe('place move command', () => {
 
     JSON.stringify(actual).should.be.exactly(JSON.stringify(then));
   });
+  
+  it('should make diagonal win possible', () => {
+    given.push({
+      gameId:'1',
+      commandId:'blah',
+      event:'movePlaced',
+      player:'Jon',
+      x:0,
+      y:0,
+      timeStamp:'2015-12-04T00:00:45Z'
+    },
+    {
+      gameId:'1',
+      commandId:'4242',
+      event:'movePlaced',
+      player:'Bjorn',
+      x:0,
+      y:2,
+      timeStamp:'2015-12-04T00:00:48Z'
+    },
+    {
+      gameId:'1',
+      commandId:'1111',
+      event:'movePlaced',
+      player:'Jon',
+      x:2,
+      y:2,
+      timeStamp:'2015-12-04T00:00:52Z'
+    },
+    {
+      gameId:'1',
+      commandId:'7777',
+      event:'movePlaced',
+      player:'Bjorn',
+      x:1,
+      y:1,
+      timeStamp:'2015-12-04T00:00:57Z'
+    },
+    {
+      gameId:'1',
+      commandId:'5544',
+      event:'movePlaced',
+      player:'Jon',
+      x:1,
+      y:2,
+      timeStamp:'2015-12-04T00:01:00Z'
+    });
+
+    when = {
+      gameId:'1',
+      commandId:'8453',
+      command:'placeMove',
+      player:'Bjorn',
+      x:2,
+      y:0,
+      timeStamp:'2015-12-04T00:01:33Z'
+    }
+
+    then=[{
+      gameId:'1',
+      commandId:'8453',
+      event:'movePlaced',
+      player:'Bjorn',
+      x:2,
+      y:0,
+      timeStamp:'2015-12-04T00:01:33Z'
+    },
+    {
+      gameId:'1',
+      commandId:'8453',
+      event:'gameOver',
+      winner:'Bjorn',
+      timeStamp:'2015-12-04T00:01:33Z'
+    }];
+
+    let actual = tictactoeCommandHandler(given).executeCommand(when);
+
+    JSON.stringify(actual).should.be.exactly(JSON.stringify(then));
+  });
+  
+    it('should not allow moves when game is over.', () => {
+    given.push({
+      gameId:'1',
+      commandId:'blah',
+      event:'movePlaced',
+      player:'Jon',
+      x:0,
+      y:0,
+      timeStamp:'2015-12-04T00:00:45Z'
+    },
+    {
+      gameId:'1',
+      commandId:'4242',
+      event:'movePlaced',
+      player:'Bjorn',
+      x:0,
+      y:2,
+      timeStamp:'2015-12-04T00:00:48Z'
+    },
+    {
+      gameId:'1',
+      commandId:'1111',
+      event:'movePlaced',
+      player:'Jon',
+      x:2,
+      y:2,
+      timeStamp:'2015-12-04T00:00:52Z'
+    },
+    {
+      gameId:'1',
+      commandId:'7777',
+      event:'movePlaced',
+      player:'Bjorn',
+      x:1,
+      y:1,
+      timeStamp:'2015-12-04T00:00:57Z'
+    },
+    {
+      gameId:'1',
+      commandId:'5544',
+      event:'movePlaced',
+      player:'Jon',
+      x:1,
+      y:2,
+      timeStamp:'2015-12-04T00:01:00Z'
+    },
+    {
+      gameId:'1',
+      commandId:'8453',
+      event:'movePlaced',
+      player:'Bjorn',
+      x:2,
+      y:0,
+      timeStamp:'2015-12-04T00:01:33Z'
+    },
+    {
+      gameId:'1',
+      commandId:'8453',
+      event:'gameOver',
+      winner:'Bjorn',
+      timeStamp:'2015-12-04T00:01:33Z'
+    });
+
+    when = {
+      gameId:'1',
+      commandId:'L45T',
+      command:'placeMove',
+      player:'Jon',
+      x:2,
+      y:1,
+      timeStamp:'2015-12-04T00:01:44Z'
+    }
+
+    then=[{
+      gameId:'1',
+      commandId:'L45T',
+      event:'illegalMove',
+      player:'Jon',
+      timeStamp:'2015-12-04T00:01:44Z'
+    }];
+
+    let actual = tictactoeCommandHandler(given).executeCommand(when);
+
+    JSON.stringify(actual).should.be.exactly(JSON.stringify(then));
+  });
 });
