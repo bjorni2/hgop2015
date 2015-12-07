@@ -68,49 +68,23 @@ function tictactoeCommandHandler(events){
         }        
         
         const side = (cmd.player === gameState.playerOne.name ? gameState.playerOne.side : gameState.playerTwo.side);
-        if(gameState.board[0][cmd.y] === side || cmd.x === 0){
-          if(gameState.board[1][cmd.y] === side || cmd.x === 1){
-            if(gameState.board[2][cmd.y] === side || cmd.x === 2){
-              return [{
-                gameId:cmd.gameId,
-                commandId:cmd.commandId,
-                event:'movePlaced',
-                player:cmd.player,
-                x:cmd.x,
-                y:cmd.y,
-                timeStamp:cmd.timeStamp
-              },
-              {
-                gameId:cmd.gameId,
-                commandId:cmd.commandId,
-                event:'gameOver',
-                winner:cmd.player,
-                timeStamp:cmd.timeStamp
-              }];
-            }
-          }
-        }
-        if(gameState.board[cmd.x][0] === side || cmd.y === 0){
-          if(gameState.board[cmd.x][1] === side || cmd.y === 1){
-            if(gameState.board[cmd.x][2] === side || cmd.y === 2){
-              return [{ 
-                gameId:cmd.gameId,
-                commandId:cmd.commandId,
-                event:'movePlaced',
-                player:cmd.player,
-                x:cmd.x,
-                y:cmd.y,
-                timeStamp:cmd.timeStamp
-              },
-              {
-                gameId:cmd.gameId,
-                commandId:cmd.commandId,
-                event:'gameOver',
-                winner:cmd.player,
-                timeStamp:cmd.timeStamp
-              }];
-            }
-          }
+        if(gameOver(gameState.board, cmd.x, cmd.y, side)){
+          return [{
+            gameId:cmd.gameId,
+            commandId:cmd.commandId,
+            event:'movePlaced',
+            player:cmd.player,
+            x:cmd.x,
+            y:cmd.y,
+            timeStamp:cmd.timeStamp
+          },
+          {
+            gameId:cmd.gameId,
+            commandId:cmd.commandId,
+            event:'gameOver',
+            winner:cmd.player,
+            timeStamp:cmd.timeStamp
+          }];
         }
 
         return [{
@@ -142,6 +116,25 @@ function legalMove(board, x, y){
     return false;
   }
   return true;
+}
+
+function gameOver(board, x, y, side){
+  if(!legalMove(board, x, y)){
+    return false;
+  }
+  
+  board[x][y] = side;
+
+  // vertical win.
+  if(board[x][0] === board[x][1] && board[x][0] === board[x][2]){
+    return true;
+  }
+  // horizontal win.
+  if(board[0][y] === board[1][y] && board[0][y] === board[2][y]){
+    return true;
+  }
+  
+  return false;
 }
 
 module.exports = tictactoeCommandHandler;
