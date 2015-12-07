@@ -42,7 +42,7 @@ function tictactoeCommandHandler(events){
           commandId:cmd.commandId,
           event:'gameJoined',
           player:cmd.player,
-          side:(events[0].side == 'X' ? 'O' : 'X'),
+          side:(events[0].side === 'X' ? 'O' : 'X'),
           timeStamp:cmd.timeStamp
           }];
         }
@@ -54,7 +54,9 @@ function tictactoeCommandHandler(events){
         }];
       }
       else if(cmd.command === 'placeMove'){
-        console.log(gameState.board);
+        console.log(gameState.board[0]);
+        console.log(gameState.board[1]);
+        console.log(gameState.board[2]);
         if(!legalMove(gameState.board, cmd.x, cmd.y)){
           return [{
             gameId:cmd.gameId,
@@ -88,6 +90,28 @@ function tictactoeCommandHandler(events){
             }
           }
         }
+        if(gameState.board[cmd.x][0] === side || cmd.y === 0){
+          if(gameState.board[cmd.x][1] === side || cmd.y === 1){
+            if(gameState.board[cmd.x][2] === side || cmd.y === 2){
+              return [{ 
+                gameId:cmd.gameId,
+                commandId:cmd.commandId,
+                event:'movePlaced',
+                player:cmd.player,
+                x:cmd.x,
+                y:cmd.y,
+                timeStamp:cmd.timeStamp
+              },
+              {
+                gameId:cmd.gameId,
+                commandId:cmd.commandId,
+                event:'gameOver',
+                winner:cmd.player,
+                timeStamp:cmd.timeStamp
+              }];
+            }
+          }
+        }
 
         return [{
           gameId:cmd.gameId,
@@ -101,7 +125,7 @@ function tictactoeCommandHandler(events){
       }
     }
   };
-};
+}
 
 function pickRandomSide(){
   if(Math.random() < 0.5){
@@ -118,7 +142,7 @@ function legalMove(board, x, y){
     return false;
   }
   return true;
-};
+}
 
 module.exports = tictactoeCommandHandler;
 
