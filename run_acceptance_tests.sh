@@ -13,6 +13,8 @@ api="$1"
 echo Exporting ACCEPTANCE_URL..
 export ACCEPTANCE_URL=http://$api
 
+npm install
+
 echo
 echo Running acceptance tests..
 grunt mochaTest:acceptance
