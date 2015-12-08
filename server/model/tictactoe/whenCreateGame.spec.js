@@ -1,12 +1,12 @@
 'use strict';
 
-const tictactoeCommandHandler = require('./tictactoeCommandHandler');
-const assert = require('assert');
+var tictactoeCommandHandler = require('./tictactoeCommandHandler');
+var assert = require('assert');
 
-describe('create game command', () => {
-  let given, when, then;
+describe('create game command', function(){
+  var given, when, then;
 
-  it('should create game', () => {
+  it('should create game', function(){
     given = [];
     when = {
       gameId:'1',
@@ -24,14 +24,14 @@ describe('create game command', () => {
       timeStamp:'2015-12-03T15:18:30Z'
     }];
     
-    let actual = tictactoeCommandHandler(given).executeCommand(when); 
+    var actual = tictactoeCommandHandler(given).executeCommand(when); 
     
     assert(actual[0].side === 'X' || actual[0].side === 'O');
     actual[0].side = 'X';
     JSON.stringify(actual).should.be.exactly(JSON.stringify(then));
   });
 
-  it('should create game with different properties', () => {
+  it('should create game with different properties', function(){
     given = [];
     when = {
       gameId:'70',
@@ -49,7 +49,7 @@ describe('create game command', () => {
       timeStamp:'2015-12-03T16:18:30Z'
     }];
 
-    let actual = tictactoeCommandHandler(given).executeCommand(when);
+    var actual = tictactoeCommandHandler(given).executeCommand(when);
     
     assert(actual[0].side === 'X' || actual[0].side === 'O');
     actual[0].side = 'X';

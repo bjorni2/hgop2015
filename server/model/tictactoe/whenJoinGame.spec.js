@@ -1,11 +1,11 @@
 'use strict';
 
-const tictactoeCommandHandler = require('./tictactoeCommandHandler');
+var tictactoeCommandHandler = require('./tictactoeCommandHandler');
 
-describe('join game command', () => {
-  let given, when, then;
+describe('join game command', function(){
+  var given, when, then;
 
-  it('should join existing game', () => {
+  it('should join existing game', function(){
     given = [{
       gameId:'1',
       commandId:'aB12',
@@ -30,12 +30,12 @@ describe('join game command', () => {
       timeStamp:'2015-12-04T00:00:30Z'
     }];
     
-    let actual = tictactoeCommandHandler(given).executeCommand(when); 
+    var actual = tictactoeCommandHandler(given).executeCommand(when); 
 
     JSON.stringify(actual).should.be.exactly(JSON.stringify(then));
   });
 
-  it('should not allow joining non-existing games', () => {
+  it('should not allow joining non-existing games', function(){
     given = [];
     when = {
       gameId:'33',
@@ -51,12 +51,12 @@ describe('join game command', () => {
       timeStamp:'2015-11-04T00:00:30Z'
     }];
 
-    let actual = tictactoeCommandHandler(given).executeCommand(when);
+    var actual = tictactoeCommandHandler(given).executeCommand(when);
 
     JSON.stringify(actual).should.be.exactly(JSON.stringify(then));
   });
   
-  it('should not allow more than two players in a game', () => {
+  it('should not allow more than two players in a game', function(){
     given = [{
       gameId:'3',
       commandId:'aB12',
@@ -88,7 +88,7 @@ describe('join game command', () => {
       timeStamp:'2015-11-04T00:00:32Z'
     }];
 
-    let actual = tictactoeCommandHandler(given).executeCommand(when);
+    var actual = tictactoeCommandHandler(given).executeCommand(when);
 
     JSON.stringify(actual).should.be.exactly(JSON.stringify(then));
   });

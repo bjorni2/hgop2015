@@ -1,7 +1,7 @@
 'use strict';
 
 function tictactoeCommandHandler(events){
-  const gameState = {
+  var gameState = {
     gameId:events[0] && events[0].gameId,
     status:'idle',
     winner:'',
@@ -17,9 +17,9 @@ function tictactoeCommandHandler(events){
     cellsLeft: 9
   };  
 
-  events.forEach((e) => {
+  events.forEach(function(e){
     if(e.event === 'movePlaced'){
-      const side = (e.player === gameState.playerOne.name ? gameState.playerOne.side : gameState.playerTwo.side);
+      var side = (e.player === gameState.playerOne.name ? gameState.playerOne.side : gameState.playerTwo.side);
       gameState.board[e.x][e.y] = side;
       gameState.cellsLeft -= 1;
     }
@@ -32,7 +32,7 @@ function tictactoeCommandHandler(events){
   });
   
   return {
-    executeCommand: (cmd) => {
+    executeCommand: function(cmd){
       if(cmd.command === 'createGame'){
         return [{
           gameId:cmd.gameId,
@@ -71,7 +71,7 @@ function tictactoeCommandHandler(events){
         }];
       }
       else if(cmd.command === 'placeMove'){   
-        const side = (cmd.player === gameState.playerOne.name ? gameState.playerOne.side : gameState.playerTwo.side);
+        var side = (cmd.player === gameState.playerOne.name ? gameState.playerOne.side : gameState.playerTwo.side);
       
         if(gameState.status === 'gameOver' || !legalMove(gameState, cmd.x, cmd.y, side)){
           return [{
@@ -147,7 +147,7 @@ function pickRandomSide(){
 }
 
 function legalMove(gameState, x, y, side){
-  const board = gameState.board;
+  var board = gameState.board;
   
   // Out of bounds.
   if(x < 0 || x > 2 || y < 0 || y > 2){
@@ -171,7 +171,7 @@ function gameOver(gameState, x, y, side){
     return false;
   }
   
-  const board = gameState.board;
+  var board = gameState.board;
   
   board[x][y] = side;
 

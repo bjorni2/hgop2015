@@ -1,11 +1,11 @@
 'use strict';
 
-const tictactoeCommandHandler = require('./tictactoeCommandHandler');
+var tictactoeCommandHandler = require('./tictactoeCommandHandler');
 
-describe('place move command', () => {
-  let given, when, then;
+describe('place move command', function(){
+  var given, when, then;
 
-  beforeEach(() => {
+  beforeEach(function(){
     given = [{
       gameId:'1',
       commandId:'aB12',
@@ -24,7 +24,7 @@ describe('place move command', () => {
     }];
   });
 
-  it('should place move in empty cell', () => {
+  it('should place move in empty cell', function(){
     when = {
       gameId:'1',
       commandId:'6667',
@@ -45,12 +45,12 @@ describe('place move command', () => {
       timeStamp:'2015-12-04T00:01:30Z'
     }];
 
-    let actual = tictactoeCommandHandler(given).executeCommand(when);
+    var actual = tictactoeCommandHandler(given).executeCommand(when);
 
     JSON.stringify(actual).should.be.exactly(JSON.stringify(then));
   });
 
-  it('should not allow placing in occupied cell', () => {        
+  it('should not allow placing in occupied cell', function(){        
     given.push({
       gameId:'1',
       commandId:'blah',
@@ -79,12 +79,12 @@ describe('place move command', () => {
       timeStamp:'2015-12-04T00:01:00Z'
     }];
 
-    let actual = tictactoeCommandHandler(given).executeCommand(when);
+    var actual = tictactoeCommandHandler(given).executeCommand(when);
 
     JSON.stringify(actual).should.be.exactly(JSON.stringify(then));
   });
 
- it('should not allow placing outside of board', () => {
+ it('should not allow placing outside of board', function(){
    when = {
      gameId:'1',
      commandId:'1234',
@@ -103,12 +103,12 @@ describe('place move command', () => {
      timeStamp:'2015-12-04T00:01:01Z'
    }];
 
-   let actual = tictactoeCommandHandler(given).executeCommand(when);
+   var actual = tictactoeCommandHandler(given).executeCommand(when);
 
    JSON.stringify(actual).should.be.exactly(JSON.stringify(then));
  });
 
-  it('should make vertical win possible', () => {
+  it('should make vertical win possible', function(){
     given.push({
       gameId:'1',
       commandId:'blah',
@@ -173,12 +173,12 @@ describe('place move command', () => {
       timeStamp:'2015-12-04T00:01:00Z'
     }];
 
-    let actual = tictactoeCommandHandler(given).executeCommand(when);
+    var actual = tictactoeCommandHandler(given).executeCommand(when);
 
     JSON.stringify(actual).should.be.exactly(JSON.stringify(then));
   });
   
-  it('should make horizontal win possible', () => {
+  it('should make horizontal win possible', function(){
     given.push({
       gameId:'1',
       commandId:'blah',
@@ -243,12 +243,12 @@ describe('place move command', () => {
       timeStamp:'2015-12-04T00:01:00Z'
     }];
 
-    let actual = tictactoeCommandHandler(given).executeCommand(when);
+    var actual = tictactoeCommandHandler(given).executeCommand(when);
 
     JSON.stringify(actual).should.be.exactly(JSON.stringify(then));
   });
   
-  it('should make diagonal win possible', () => {
+  it('should make diagonal win possible', function(){
     given.push({
       gameId:'1',
       commandId:'blah',
@@ -322,12 +322,12 @@ describe('place move command', () => {
       timeStamp:'2015-12-04T00:01:33Z'
     }];
 
-    let actual = tictactoeCommandHandler(given).executeCommand(when);
+    var actual = tictactoeCommandHandler(given).executeCommand(when);
 
     JSON.stringify(actual).should.be.exactly(JSON.stringify(then));
   });
   
-  it('should not allow moves when game is over.', () => {
+  it('should not allow moves when game is over.', function(){
     given.push({
       gameId:'1',
       commandId:'blah',
@@ -408,12 +408,12 @@ describe('place move command', () => {
       timeStamp:'2015-12-04T00:01:44Z'
     }];
 
-    let actual = tictactoeCommandHandler(given).executeCommand(when);
+    var actual = tictactoeCommandHandler(given).executeCommand(when);
 
     JSON.stringify(actual).should.be.exactly(JSON.stringify(then));
   });
   
-  it('should make draws possible', () => {
+  it('should make draws possible', function(){
     given.push({
       gameId:'1',
       commandId:'blah',
@@ -514,12 +514,12 @@ describe('place move command', () => {
       timeStamp:'2015-12-04T00:01:50Z'
     }];
 
-    let actual = tictactoeCommandHandler(given).executeCommand(when);
+    var actual = tictactoeCommandHandler(given).executeCommand(when);
 
     JSON.stringify(actual).should.be.exactly(JSON.stringify(then));
   });
   
-  it('should not allow O to start the game', () => {
+  it('should not allow O to start the game', function(){
     when = {
       gameId:'1',
       commandId:'9231',
@@ -538,7 +538,7 @@ describe('place move command', () => {
       timeStamp:'2015-12-04T00:01:30Z'
     }];
 
-    let actual = tictactoeCommandHandler(given).executeCommand(when);
+    var actual = tictactoeCommandHandler(given).executeCommand(when);
 
     JSON.stringify(actual).should.be.exactly(JSON.stringify(then));
   });
