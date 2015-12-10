@@ -11,7 +11,7 @@ describe('join game command', function(){
       commandId:'aB12',
       event:'gameCreated',
       player:'Jon',
-      side:'O',
+      side:'X',
       timeStamp:'2015-12-04T00:00:03Z'
     }];
     when = {
@@ -26,7 +26,7 @@ describe('join game command', function(){
       commandId:'1337',
       event:'gameJoined',
       player:'Bjorn',
-      side:'X',
+      side:'O',
       timeStamp:'2015-12-04T00:00:30Z'
     }];
     
@@ -62,7 +62,7 @@ describe('join game command', function(){
       commandId:'aB12',
       event:'gameCreated',
       player:'Jon',
-      side:'O',
+      side:'X',
       timeStamp:'2015-12-04T00:00:03Z'
     },
     {
@@ -70,7 +70,7 @@ describe('join game command', function(){
       commandId:'1337',
       event:'gameJoined',
       player:'Bjorn',
-      side:'X',
+      side:'O',
       timeStamp:'2015-12-04T00:00:30Z'
     }];
     when = {

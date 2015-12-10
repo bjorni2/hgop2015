@@ -39,7 +39,7 @@ function tictactoeCommandHandler(events){
           commandId:cmd.commandId,
           event:'gameCreated',
           player:cmd.player,
-          side:pickRandomSide(),
+          side:'X', //pickRandomSide(),
           timeStamp:cmd.timeStamp
         }];  
       }
@@ -59,7 +59,7 @@ function tictactoeCommandHandler(events){
           commandId:cmd.commandId,
           event:'gameJoined',
           player:cmd.player,
-          side:(events[0].side === 'X' ? 'O' : 'X'),
+          side:'O', //(events[0].side === 'X' ? 'O' : 'X'),
           timeStamp:cmd.timeStamp
           }];
         }
