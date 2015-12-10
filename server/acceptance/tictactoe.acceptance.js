@@ -3,6 +3,7 @@
 var should = require('should');
 var request = require('supertest');
 var assert = require('assert');
+var uuid = require('node-uuid');
 var acceptanceUrl = process.env.ACCEPTANCE_URL;
 
 
@@ -71,15 +72,38 @@ describe('TEST ENV GET /api/gameHistory', function () {
       'timeStamp': '2014-12-02T11:29:29Z'
     };
     
-    given(command).sentTo('/api/createGame').expect(gcEvent).when(done);
+    given(player('Bjorn').createsGame("888"))
+      .sentTo('/api/createGame')
+      .expect('gameCreated')
+      .withPlayer('Bjorn')
+      .when(done);
   });
 
 });
 
+function player(name){
+  var name = name;
+  
+  var playerApi = {
+    createsGame: function(gameId){
+      return {
+        commandId: uuid.v4(),
+        gameId: gameId,
+        command: 'createGame',
+        player: name,
+        timeStamp: Date.now()
+      };
+    }
+  }
+  return playerApi;
+}
+
 function given(cmd){
   var cmd = cmd;
   var destination = undefined;
-  var expectations = [];
+  // var expectations = [];
+  var expected = '';
+  var player = '';
   
   var givenApi = {
     sentTo: function(dest){
@@ -87,11 +111,16 @@ function given(cmd){
       return givenApi;
     },
     expect: function(evnt){
-      expectations.push(evnt);
+      // expectations.push(evnt);
+      expected = evnt;
       return givenApi;
     },
     and: function(evnt){
       expectations.push(evnt);
+      return givenApi;
+    },
+    withPlayer: function(player){
+      player = player;
       return givenApi;
     },
     when: function(done){
@@ -111,7 +140,9 @@ function given(cmd){
               res.body.should.be.instanceof(Array);
               res.body[0].side.should.be.equalOneOf('X', 'O');
               res.body[0].side = 'X';
-              should(res.body).eql(expectations);
+              res.body[0].player = player;
+              res.body[0].event = expected;
+              // should(res.body).eql(expectations);
               done();
             });
         });
