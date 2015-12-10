@@ -2,7 +2,6 @@
 
 var should = require('should');
 var request = require('supertest');
-var assert = require('assert');
 var uuid = require('node-uuid');
 var acceptanceUrl = process.env.ACCEPTANCE_URL;
 
@@ -37,8 +36,6 @@ describe('TEST ENV GET /api/gameHistory', function () {
           .end(function (err, res) {
             if (err) return done(err);
             res.body.should.be.instanceof(Array);
-            assert(res.body[0].side === 'X' || res.body[0].side === 'O');
-            res.body[0].side = 'X';
             should(res.body).eql(
               [{
                 'commandId': '1234',
@@ -54,44 +51,69 @@ describe('TEST ENV GET /api/gameHistory', function () {
   });
 
 
-  it('Should execute fluid API test', function (done) {
-    var command = {
-      commandId : '1234',
-      gameId : '888',
-      command: 'createGame',
-      player: 'Bjorn',
-      timeStamp: '2014-12-02T11:29:29Z'
-    };
-    
-    var gcEvent = {
-      'commandId': '1234',
-      'gameId': '888',
-      'event': 'gameCreated',
-      'player': 'Bjorn',
-      'side': 'X',
-      'timeStamp': '2014-12-02T11:29:29Z'
-    };
-    
-    given(player('Bjorn').createsGame("888"))
-      .sentTo('/api/createGame')
-      .expect('gameCreated')
-      .withPlayer('Bjorn')
-      .when(done);
-  });
-
+  it('Should execute fluid API test', function (done) { 
+    given(player('Bjorn').createsGame('888'))
+      .and(player('Gunnar').joinsGame('888'))
+      .and(player('Bjorn').placesMove(0, 0).inGame('888'))
+      .and(player('Gunnar').placesMove(0, 1).inGame('888'))
+      .and(player('Bjorn').placesMove(0, 2).inGame('888'))
+      .and(player('Gunnar').placesMove(1, 2).inGame('888'))
+      .and(player('Bjorn').placesMove(1, 1).inGame('888'))
+      .and(player('Gunnar').placesMove(2, 0).inGame('888'))
+      .and(player('Bjorn').placesMove(1, 0).inGame('888'))
+      .and(player('Gunnar').placesMove(2, 2).inGame('888'))
+      .and(player('Bjorn').placesMove(2, 1).inGame('888'))
+      .expect('gameOver').withWinner('').isOk(done);
+  }); 
 });
 
 function player(name){
   var name = name;
+  var placeX = undefined;
+  var placeY = undefined;
   
   var playerApi = {
     createsGame: function(gameId){
       return {
-        commandId: uuid.v4(),
-        gameId: gameId,
-        command: 'createGame',
-        player: name,
-        timeStamp: Date.now()
+        cmd: {
+          commandId: uuid.v4(),
+          gameId: gameId,
+          command: 'createGame',
+          player: name,
+          timeStamp: Date.now()
+        },
+        destination: '/api/createGame'
+      };
+    },
+    joinsGame: function(gameId){
+      return {
+        cmd: {
+          commandId: uuid.v4(),
+          gameId: gameId,
+          command: 'joinGame',
+          player: name,
+          timeStamp: Date.now()
+        },
+        destination: '/api/joinGame'
+      };
+    },
+    placesMove: function(x, y){
+      placeX = x;
+      placeY = y;
+      return playerApi;
+    },
+    inGame: function(gameId){
+      return {
+        cmd: {
+          commandId: uuid.v4(),
+          gameId: gameId,
+          command: 'placeMove',
+          player: name,
+          x: placeX,
+          y: placeY,
+          timeStamp: Date.now()
+        },
+        destination: '/api/placeMove'
       };
     }
   }
@@ -99,53 +121,81 @@ function player(name){
 }
 
 function given(cmd){
-  var cmd = cmd;
-  var destination = undefined;
-  // var expectations = [];
-  var expected = '';
-  var player = '';
+  var cmds = [cmd];
+  var expectations = [];
+  var player = undefined;
+  var winner = undefined;
   
   var givenApi = {
-    sentTo: function(dest){
-      destination = dest;
-      return givenApi;
-    },
     expect: function(evnt){
-      // expectations.push(evnt);
-      expected = evnt;
-      return givenApi;
-    },
-    and: function(evnt){
       expectations.push(evnt);
+      // expected = evnt;
       return givenApi;
     },
-    withPlayer: function(player){
-      player = player;
+    and: function(cmd){
+      cmds.push(cmd);
       return givenApi;
     },
-    when: function(done){
-      var req = request(acceptanceUrl);
-      req
-        .post(destination)
-        .type('json')
-        .send(cmd)
-        .end(function (err, res) {
-          if (err) return done(err);
-          request(acceptanceUrl)
-            .get('/api/gameHistory/' + cmd.gameId)
-            .expect(200)
-            .expect('Content-Type', /json/)
-            .end(function (err, res) {
-              if (err) return done(err);
-              res.body.should.be.instanceof(Array);
-              res.body[0].side.should.be.equalOneOf('X', 'O');
-              res.body[0].side = 'X';
-              res.body[0].player = player;
-              res.body[0].event = expected;
-              // should(res.body).eql(expectations);
-              done();
-            });
+    withPlayer: function(name){
+      player = name;
+      return givenApi;
+    },
+    withWinner: function(name){
+      winner = name;
+      return givenApi;
+    },
+    isOk: function(done){
+      for(var i = 0; i < cmds.length; i++){
+        var req = request(acceptanceUrl);
+        req
+          .post(cmds[i].destination)
+          .type('json')
+          .send(cmds[i].cmd)
+          .end(function(err, res){
+            if(err) return done(err);
+          })
+      }
+      
+      request(acceptanceUrl)
+        .get('/api/gameHistory/' + cmds[0].cmd.gameId)
+        .expect(200)
+        .expect('Content-Type', /json/)
+        .end(function(err, res){
+          if(err) return done(err);
+          
+          var last = res.body.length-1;
+          res.body.should.be.instanceof(Array);
+          res.body[last].event.should.be.eql(expectations[0]);
+          // console.log(res.body[res.body.length-1]);
+          if(expectations[0] === 'gameOver'){
+            res.body[last].winner.should.be.eql(winner);
+          }
+          else{
+            res.body[last].player.should.be.eql(player);
+          }
+          
+          done();
         });
+      
+      // var req = request(acceptanceUrl);
+      // req
+        // .post(cmds[0].destination)
+        // .type('json')
+        // .send(cmds[0].cmd)
+        // .end(function (err, res) {
+          // if (err) return done(err);
+          // request(acceptanceUrl)
+            // .get('/api/gameHistory/' + cmds[0].cmd.gameId)
+            // .expect(200)
+            // .expect('Content-Type', /json/)
+            // .end(function (err, res) {
+              // if (err) return done(err);
+              // res.body.should.be.instanceof(Array);
+              // res.body[0].player.should.be.eql(player);
+              // res.body[0].event.should.be.eql(expectations[0]);
+              // done();
+            // });
+        // });
     }
   }
   return givenApi;
