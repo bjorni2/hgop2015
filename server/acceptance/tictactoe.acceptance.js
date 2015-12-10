@@ -63,7 +63,7 @@ describe('TEST ENV GET /api/gameHistory', function () {
       .and(player('Bjorn').placesMove(1, 0).inGame('888'))
       .and(player('Gunnar').placesMove(2, 2).inGame('888'))
       .and(player('Bjorn').placesMove(2, 1).inGame('888'))
-      .expect('gameOver').withWinner('').isOk(done);
+      .expect('gameOver').withWinner('Bjorn').isOk(done);
   }); 
 });
 
@@ -176,26 +176,6 @@ function given(cmd){
           
           done();
         });
-      
-      // var req = request(acceptanceUrl);
-      // req
-        // .post(cmds[0].destination)
-        // .type('json')
-        // .send(cmds[0].cmd)
-        // .end(function (err, res) {
-          // if (err) return done(err);
-          // request(acceptanceUrl)
-            // .get('/api/gameHistory/' + cmds[0].cmd.gameId)
-            // .expect(200)
-            // .expect('Content-Type', /json/)
-            // .end(function (err, res) {
-              // if (err) return done(err);
-              // res.body.should.be.instanceof(Array);
-              // res.body[0].player.should.be.eql(player);
-              // res.body[0].event.should.be.eql(expectations[0]);
-              // done();
-            // });
-        // });
     }
   }
   return givenApi;
