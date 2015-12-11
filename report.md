@@ -17,3 +17,8 @@ Er javascript keyrslu umhverfi sem keyrir á server-side, þ.e. það er ekki bu
 
 ##bower
 Pakkaumhverfi sem aðallega er notað til að sækja client side javascript söfn.
+
+#Load testing
+Eftir nokkrar keyrslur af álagsprófinu festi ég endurtekningarnar á 70 og timeout á 7,5s. Augljóslega ekki mikið álag sem vélin mín ræður við í þessu umhverfi.
+
+Álagsprófin keyra parallel eins og þau eru sett upp. Í nodejs eru IO köll non blocking, þegar IO kall er framkvæmt er yfirleitt síðasti stikinn í fallinu callback fall sem kallað er í þegar IO-inu er lokið. Eftir að kallað hefur verið í end fallið í request og áður en að svarið berst til baka er því hægt að halda áfram að keyra kóðann og þ.a.m. senda fleiri request.
