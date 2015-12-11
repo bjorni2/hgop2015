@@ -83,37 +83,47 @@ function given(cmd){
       return givenApi;
     },
     isOk: function(done){
-      for(var i = 0; i < cmds.length; i++){
-        var req = request(acceptanceUrl);
-        req
-          .post(cmds[i].destination)
-          .type('json')
-          .send(cmds[i].cmd)
-          .end(function(err, res){
-            if(err) return done(err);
-          })
+
+      function sendCmd(i){
+        if(i < cmds.length){
+          var req = request(acceptanceUrl);
+          req
+            .post(cmds[i].destination)
+            .type('json')
+            .send(cmds[i].cmd)
+            .end(function(err, res){
+              if(err){
+                return done(err);
+              }
+              else if((i+1) === cmds.length){
+                request(acceptanceUrl)
+                  .get('/api/gameHistory/' + cmds[0].cmd.gameId)
+                  .expect(200)
+                  .expect('Content-Type', /json/)
+                  .end(function(err, res){
+                    if(err) return done(err);
+                    
+                    // TODO: Handle more than one return event(and stop using /api/gameHistory)
+                    var last = res.body.length-1;
+                    res.body.should.be.instanceof(Array);
+                    res.body[last].event.should.be.eql(expectations[0]);
+                    if(expectations[0] === 'gameOver'){
+                      res.body[last].winner.should.be.eql(winner);
+                    }
+                    else{
+                      res.body[last].player.should.be.eql(player);
+                    }
+                    
+                    done();
+                  });
+              }
+              else{
+                sendCmd(i+1);
+              }
+            })
+        }
       }
-      
-      request(acceptanceUrl)
-        .get('/api/gameHistory/' + cmds[0].cmd.gameId)
-        .expect(200)
-        .expect('Content-Type', /json/)
-        .end(function(err, res){
-          if(err) return done(err);
-          
-          var last = res.body.length-1;
-          res.body.should.be.instanceof(Array);
-          res.body[last].event.should.be.eql(expectations[0]);
-          // console.log(res.body[res.body.length-1]);
-          if(expectations[0] === 'gameOver'){
-            res.body[last].winner.should.be.eql(winner);
-          }
-          else{
-            res.body[last].player.should.be.eql(player);
-          }
-          
-          done();
-        });
+      sendCmd(0);
     }
   }
   return givenApi;
