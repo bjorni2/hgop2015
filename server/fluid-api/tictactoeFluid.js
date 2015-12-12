@@ -5,10 +5,10 @@ var request = require('supertest');
 var uuid = require('node-uuid');
 var acceptanceUrl = process.env.ACCEPTANCE_URL;
 
-function player(name){
-  var name = name;
-  var placeX = undefined;
-  var placeY = undefined;
+function player(pName){
+  var name = pName;
+  var placeX;
+  var placeY;
   
   var playerApi = {
     createsGame: function(gameId){
@@ -61,8 +61,8 @@ function player(name){
 function given(cmd){
   var cmds = [cmd];
   var expectations = [];
-  var player = undefined;
-  var winner = undefined;
+  var player;
+  var winner;
   
   var givenApi = {
     expect: function(evnt){

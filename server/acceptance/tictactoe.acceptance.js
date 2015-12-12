@@ -11,6 +11,7 @@ var given = require('../fluid-api/tictactoeFluid').given;
 describe('TEST ENV GET /api/gameHistory', function () {
 
   it('Should have ACCEPTANCE_URL environment variable exported.', function () {
+    /*jshint -W030 */
     acceptanceUrl.should.be.ok;
   });
 
