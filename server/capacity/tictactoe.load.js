@@ -3,8 +3,8 @@ var given = require('../fluid-api/tictactoeFluid').given;
 
 it('Should play 70 games in 7.5 seconds.', function (done) {
   var doneCount = 0;
-  var gamesToPlay = 70;
-  var x = 7.5;
+  var gamesToPlay = 30;
+  var x = 17.5;
 
   this.timeout(x * 1000);
 
