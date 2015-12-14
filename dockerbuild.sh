@@ -3,8 +3,8 @@
 set -e
 set -o pipefail
 
-export MOCHA_REPORTER=xunit
-export MOCHA_REPORT=server-tests.xml
+#export MOCHA_REPORTER=xunit
+#export MOCHA_REPORT=server-tests.xml
 
 echo Cleaning...
 rm -rf ./dist

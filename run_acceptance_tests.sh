@@ -8,8 +8,8 @@ if [ "$1" == "" ]; then
   exit 1
 fi
 
-export MOCHA_REPORTER=xunit
-export MOCHA_REPORT=server-tests.xml
+#export MOCHA_REPORTER=xunit
+#export MOCHA_REPORT=server-tests.xml
 
 api="$1"
 
