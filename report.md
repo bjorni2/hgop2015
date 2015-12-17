@@ -27,8 +27,8 @@ Eftir nokkrar keyrslur af álagsprófinu festi ég endurtekningarnar á 70 og ti
 
 * What does this give us? Who would use the capability to track versions and why? Who would use capability to deploy any version and why?
  * Nú höfum við möguleika á því að fara aftur í tímann ef eitthvað fer úrskeiðis og keyra upp eldri útgáfu af hugbúnaðinum á einfaldan hátt.
- * ??
- * Operation teymi gætu nýtt sér það að deploya hvaða útgáfu sem er, bæði ef að bakka þarf með nýja útgáfu og fara í eldri og einnig ef viðskiptavinur þarf gamla útgáfu af kerfinu af einhverri ástæðu(Samþætting við önnur kerfi?).
+ * Auditers til þess að sjá að kröfur um rekjanleika séu uppfylltar.
+ * Operation teymi gætu nýtt sér það að deploya hvaða útgáfu sem er, bæði ef að bakka þarf með nýja útgáfu og fara í eldri og einnig ef viðskiptavinur þarf gamla útgáfu af kerfinu af einhverri ástæðu(Samþætting við önnur kerfi?). Einnig gætu testerar nýtt sér þetta til að prufa hvaða útgáfu sem er.
 
 * What was wrong with having docker push in the deployment script rather than in the dockerbuild.sh script?
  * Við endurnýtum deployment skriftuna fyrir öll umhverfi, ef að push er framkvæmt þar værum við að gera það jafn oft og fjöldi umhverfa sem við deployum í. Með því að færa þetta í dokcerbuild.sh er push einungis framkvæmt einu sinni þar og deployment skriftan sér bara um að sækja og keyra upp. 
