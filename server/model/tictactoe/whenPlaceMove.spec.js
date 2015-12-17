@@ -42,6 +42,7 @@ describe('place move command', function(){
       player:'Jon',
       x:1,
       y:1,
+      side: 'X',
       timeStamp:'2015-12-04T00:01:30Z'
     }];
 
@@ -163,6 +164,7 @@ describe('place move command', function(){
       player:'Jon',
       x:2,
       y:1,
+      side: 'X',
       timeStamp:'2015-12-04T00:01:00Z'
     },
     {
@@ -233,6 +235,7 @@ describe('place move command', function(){
       player:'Jon',
       x:0,
       y:0,
+      side:'X',
       timeStamp:'2015-12-04T00:01:00Z'
     },
     {
@@ -312,6 +315,7 @@ describe('place move command', function(){
       player:'Bjorn',
       x:2,
       y:0,
+      side:'O',
       timeStamp:'2015-12-04T00:01:33Z'
     },
     {
@@ -504,6 +508,7 @@ describe('place move command', function(){
       player:'Jon',
       x:2,
       y:1,
+      side:'X',
       timeStamp:'2015-12-04T00:01:50Z'
     },
     {

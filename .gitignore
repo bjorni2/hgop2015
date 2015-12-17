@@ -5,7 +5,7 @@ public
 client/bower_components
 dist
 /server/config/local.env.js
-acceptance-tests
-server-tests
-load-tests
+acceptance-tests*
+server-tests*
+load-tests*
 TESTS*

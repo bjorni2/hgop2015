@@ -95,6 +95,7 @@ function tictactoeCommandHandler(events){
             player:cmd.player,
             x:cmd.x,
             y:cmd.y,
+            side: side,
             timeStamp:cmd.timeStamp
           },
           {
@@ -114,6 +115,7 @@ function tictactoeCommandHandler(events){
             player:cmd.player,
             x:cmd.x,
             y:cmd.y,
+            side: side,
             timeStamp:cmd.timeStamp
           },
           {
@@ -132,6 +134,7 @@ function tictactoeCommandHandler(events){
           player:cmd.player,
           x:cmd.x,
           y:cmd.y,
+          side: side,
           timeStamp:cmd.timeStamp
         }];
       }
