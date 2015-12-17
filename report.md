@@ -3,11 +3,17 @@
 ##Vagrant
 Heldur utan um allar stillingar og dependency fyrir vinnu umhverfið okkar. Allt fer í eina skrá sem er svo hægt að deila til að tryggja að allir séu að vinna við sömu aðstæður í sama umhverfi. Umhverfin sjálf eru keyrð upp t.d. í VirtualBox eða annari sýndarvél. Vagrant er þó ekki bundið við að keyra á local sýndarvélum.
 
+Vagrant sér um hluta af stillingum á umhverfinu sem við keyrum í og minnkar því líkur á veseni þegar menn eru að handstilla ýmis atriði í vélunum.
+
 ##VirtualBox
 Gerir okkur kleyft að keyra x86 sýndarvélar. Hentugt til að setja upp ýmis stýrikerfi á sömu vél án þess að þurfa að endurræsa vélina. 
 
+Getum nýtt VirtualBox til þess að keyra hugbúnaðinn sem fyrst á production-like umhverfi á ódýran hátt.
+
 ##Grunt
 Framkvæmir ýmiss konar verkefni sem þarf að gera áður en forritið er keyrt t.d. að keyra unit test, pakka saman og minnka .js og .css skrár fyrir vefsíður og keyra forritið sjálft.
+
+Grunt gerir það einfalt að fá feedback hratt þegar að breytingar eru gerðar á kóðanum.
 
 ##npm
 Pakkaumhverfið sem notast er við í node, getur lesið úr package.json skrá til að sækja öll forritssöfn sem verkefnið er háð. Getur einnig búið til og bætt pökkum við package.json skrá verkefnis sem verið er að vinna í(eða bætt pökkunum í global package cache á vélinni).
@@ -22,6 +28,10 @@ Pakkaumhverfi sem aðallega er notað til að sækja client side javascript söf
 Eftir nokkrar keyrslur af álagsprófinu festi ég endurtekningarnar á 70 og timeout á 7,5s. Augljóslega ekki mikið álag sem vélin mín ræður við í þessu umhverfi.
 
 Álagsprófin keyra parallel eins og þau eru sett upp. Í nodejs eru IO köll non blocking, þegar IO kall er framkvæmt er yfirleitt síðasti stikinn í fallinu callback fall sem kallað er í þegar IO-inu er lokið. Eftir að kallað hefur verið í end fallið í request og áður en að svarið berst til baka er því hægt að halda áfram að keyra kóðann og þ.a.m. senda fleiri request.
+
+#Day 2 - deployment script
+
+Eins og staðan er núna erum við komin með dev umhverfi þar sem hugbúnaðurinn er þróaður keyrandi á centOS í virtualbox með vagrant sem manager. Svo erum við með test umhverfi sett upp á sama hátt með vagrant og virtualbox en keyrandi á Ubuntu. Test umhverfið inniheldur ekkert af tólunum sem við notum við þróun í dev umhverfinu heldur þarf það einungis að geta keyrt binaries sem í þessu tilfelli er gert með docker. Til að deploya á test erum við með deployment scriptu sem keyra þarft handvirkt, scriptan tekur núverandi útgáfu af dockerhub og keyrir hana á test umhverfinu(eða því umhverfi sem sett er inn sem parameter í scriptið).
 
 #Day 10 - traceability, production env, and deploy any version
 
