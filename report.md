@@ -45,3 +45,27 @@ Eins og staðan er núna erum við komin með dev umhverfi þar sem hugbúnaður
 
 * How does the "deploy any version, anywhere" build feature work? Hint: Track GIT_COMMIT
  * Það er hægt að merka containera í docker með tagi, í okkar tilfelli notum við git commit sha-ið sem tag sem einkennir þá containerinn sem útgáfu frá ákveðnu commiti í git. Ferlið byrjar í dockerbuild skriftunni sem taggar containerinn, deployment skriftan notar svo þetta sama tag til að sækja ákveðna útgáfu frá dockerhub og keyra hana upp. Þetta gerist allt sjálfkrafa í Jenkins þegar nýtt commit er sett inn á repoið á GitHub en einnig er mögulegt að keyra sjálfur upp deployment skriftuna og gefa henni ákveð commit sha sem færibreytu sem er þá notuð til að sækja þá tilteknu útgáfu frá dockerhub og þ.a.l. er hægt að keyra upp hvaða útgáfu sem er hvar sem er.
+
+#Jenkins scripts
+
+##Commit stage
+  
+    ./build.sh
+    
+##Acceptance stage
+
+    export GIT_UPSTREAM_HASH=$(<dist/githash.txt)
+    env
+    ./deploy_container.sh 192.168.33.10 9000 $GIT_UPSTREAM_HASH
+    ./run_acceptance_tests.sh 192.168.33.10:9000
+    
+##Capacity stage
+
+    ./run_load_tests.sh 192.168.33.10:9000
+
+##Production
+
+    export GIT_UPSTREAM_HASH=$(<dist/githash.txt)
+    env
+    ./deploy_container.sh 192.168.33.10 9001 $GIT_UPSTREAM_HASH
+ 
